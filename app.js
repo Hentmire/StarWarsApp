@@ -11,7 +11,6 @@ function loadApplication(e) {
 
 	getHeroesRequest('https://swapi.co/api/people/')
 	.then(data => {
-		console.log(data);
 		let heroCount = data.count;
 		let pageCount = Math.ceil(heroCount / 10);
 		const heroInfo = getHeroInfo(data, 1);
@@ -36,10 +35,7 @@ function seachHero(e) {
 	getHeroesRequest(`https://swapi.co/api/people/?search=${request}`)
 	.then(data => {
 		document.querySelector('.heroes-section').innerHTML = "<div class='first-hero-box'></div><div class='second-hero-box'></div><div class='slider'></div>";
-		console.log(data.count);
 		if(data.count == 0) {
-			console.log("bbb");
-			console.log(document.querySelector('.first-hero-box'));
 			document.querySelector('.first-hero-box').innerHTML = "<div><span class='error-message'>There is no hero with such name</span></div>";
 		} else {
 			let heroCount = data.count;
