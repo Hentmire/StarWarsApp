@@ -6,14 +6,14 @@ body, div {
 }
 
 body {
-    background-color: rgb(9, 8, 8);/*rgb(197, 245, 236);*/
+    background-color: rgb(9, 8, 8);
     font-family: Arial, sans-serif;
 }
 
 .app-name {
   width: 100%;
   height: 100px;
-  color: white;/*rgb(237, 237, 39);*/
+  color: white;
   font-size: 60px;
   text-align: center;
   padding-top: 60px;
@@ -100,24 +100,13 @@ HEROES SECTION
   text-align: center;
 }
 
-.first-hero-box {
+.hero-box {
   margin: 0 auto;
   width: 95%;
-  height: 170px;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   margin-top: 100px;
-}
-
-.second-hero-box {
-  margin: 0 auto;
-  width: 95%;
-  height: 170px;
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin-top: 60px;
 }
 
 .hero-type {
@@ -152,28 +141,6 @@ HEROES SECTION
 }
 
 .hero-type:nth-child(2n+1) .hero-name:hover {
-  cursor: pointer;
-  box-shadow: 0px 0px 14px 4px rgba(25, 100, 205, 0.75);
-}
-
-.second-hero-box .hero-type:nth-child(2n) .hero-name {
-  background-color: yellow;
-  color: black;
-}
-
-.second-hero-box .hero-type:nth-child(2n+1) .hero-name {
-  background-color: rgb(11, 68, 170);
-  color: white;
-}
-
-.second-hero-box .hero-type:nth-child(2n+1) .hero-name:hover {
-  cursor: pointer;
-  -webkit-box-shadow: 0px 0px 14px 4px rgba(237, 237, 39, 0.75);
-  -moz-box-shadow: 0px 0px 14px 4px rgba(237, 237, 39, 0.75);
-  box-shadow: 0px 0px 14px 4px rgba(237, 237, 39, 0.75);
-}
-
-.second-hero-box .hero-type:nth-child(2n) .hero-name:hover {
   cursor: pointer;
   box-shadow: 0px 0px 14px 4px rgba(25, 100, 205, 0.75);
 }

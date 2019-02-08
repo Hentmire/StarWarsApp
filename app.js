@@ -5,22 +5,18 @@ function loadApplication(e) {
 	e.preventDefault();
 
 	document.querySelector('.start-app-btn').removeEventListener('click', (e) => loadApplication(e));
-	document.body.innerHTML = "<div class='search-form'><form><button type='submit' id='btn'></button><input type='search' placeholder='Search your hero' id='search'></form></div><section class='heroes-section' id='heroes-section'><div class='first-hero-box'></div><div class='second-hero-box'></div><div class='slider'></div></section>";
+	document.body.innerHTML = "<div class='search-form'><form><button type='submit' id='btn'></button><input type='search' placeholder='Search your hero' id='search'></form></div><section class='heroes-section' id='heroes-section'><div class='hero-box'></div><div class='slider'></div></section>";
 
 	document.getElementById("btn").onclick = seachHero;
 
-	getHeroesRequest('https://swapi.co/api/people/')
+	getHeroesRequest('https://swapi.co/api/people/') //сделать запрос по API и отрендерить страницу
 	.then(data => {
 		let heroCount = data.count;
 		let pageCount = Math.ceil(heroCount / 10);
-		const heroInfo = getHeroInfo(data, 1);
-		for (let i = 0; i < 5; i++) {
+		const heroInfo = getHeroInfo(data, 0);
+		for (let i = 0; i < 10; i++) {
 		  let hero = createHeroes(heroInfo, i);
-		  renderHero(hero, 'first-hero-box');
-		}
-		for (let i = 5; i < 10; i++) {
-		  let hero = createHeroes(heroInfo, i);
-		  renderHero(hero, 'second-hero-box');
+		  renderHero(hero, 'hero-box');
 		}
 		addSlider(pageCount);
 		toggleInfo();
@@ -28,38 +24,37 @@ function loadApplication(e) {
 	})
 }
 
-function seachHero(e) {
+function seachHero(e) { //поиск по имени героя
 	e.preventDefault();
   let request = document.getElementById("search").value;
 
 	getHeroesRequest(`https://swapi.co/api/people/?search=${request}`)
 	.then(data => {
-		document.querySelector('.heroes-section').innerHTML = "<div class='first-hero-box'></div><div class='second-hero-box'></div><div class='slider'></div>";
+		document.querySelector('.heroes-section').innerHTML = "<div class='hero-box'></div><div class='slider'></div>";
 		if(data.count == 0) {
-			document.querySelector('.first-hero-box').innerHTML = "<div><span class='error-message'>There is no hero with such name</span></div>";
+			document.querySelector('.hero-box').innerHTML = "<div><span class='error-message'>There is no hero with such name</span></div>";
 		} else {
 			let heroCount = data.count;
 	    let pageCount = Math.ceil(heroCount / 10);
 	    const heroInfo = getHeroInfo(data, 0);
 	    for (let i = 0; i < heroInfo.param.length; i++) {
 	      let hero = createHeroes(heroInfo, i);
-	      renderHero(hero, 'first-hero-box');
+	      renderHero(hero, 'hero-box');
 	    }
 			toggleInfo();
 	    addSlider(pageCount);
 	    return heroInfo;
 		}
-
 	})
 }
 
-function getHeroesRequest(url) {
+function getHeroesRequest(url) { //make a request for Star Wars API
 	return fetch(url)
 		.then(response => response.json())
 }
 
 
-function getHeroInfo(data, i) {
+function getHeroInfo(data, i) { //Get hero's info and save in localStorage
 	const heroInfo = {
 		param: data.results
 	};
@@ -96,7 +91,7 @@ function renderHero(hero, boxName) {
 	document.querySelector(`.${boxName}`).appendChild(newHeroCard);
 }
 
-function toggleInfo() {
+function toggleInfo() { //render hero info when click the hero-button
 	const allHeroesName = document.querySelectorAll('.hero-name');
 	const allHeroesCard = document.querySelectorAll('.hero-type');
 	for (let i = 0; i < allHeroesName.length; i++) {
@@ -108,7 +103,7 @@ function toggleInfo() {
 }
 
 
-function addSlider(pageCount) {
+function addSlider(pageCount) { //pagination
   for (let i = 1; i <= pageCount; i++) {
     let pageNumber = document.createElement('a');
     pageNumber.classList = 'page-nav';
@@ -121,31 +116,21 @@ function addSlider(pageCount) {
 		heroPages[i].addEventListener('click', e => {
 			heroPages.forEach(item => item.classList.remove('current'));
 			heroPages[i].classList.add('current');
-			if (localStorage.getItem(`${i}`)) {
+			if (localStorage.getItem(`${i}`)) { //check would this page have opened yet
 				let heroInfo = JSON.parse(localStorage.getItem(`${i}`));
-				document.querySelector('.first-hero-box').innerHTML = '';
-				document.querySelector('.second-hero-box').innerHTML = '';
-				for (let i = 0; i < 5; i++) {
+				document.querySelector('.hero-box').innerHTML = '';
+				for (let i = 0; i < 10; i++) {
 					let hero = createHeroes(heroInfo, i);
-					renderHero(hero, 'first-hero-box');
+					renderHero(hero, 'hero-box');
 				}
-				for (let i = 5; i < 10; i++) {
-					let hero = createHeroes(heroInfo, i);
-					renderHero(hero, 'second-hero-box');
-			}
 			} else {
 				getHeroesRequest(`https://swapi.co/api/people/?page=${i+1}`)
 					.then(data => {
-						document.querySelector('.first-hero-box').innerHTML = '';
-						document.querySelector('.second-hero-box').innerHTML = '';
+						document.querySelector('.hero-box').innerHTML = '';
 						const heroInfo = getHeroInfo(data, i);
-						for (let i = 0; i < 5; i++) {
+						for (let i = 0; i < 10; i++) {
 							let hero = createHeroes(heroInfo, i);
-							renderHero(hero, 'first-hero-box');
-						}
-						for (let i = 5; i < 10; i++) {
-							let hero = createHeroes(heroInfo, i);
-							renderHero(hero, 'second-hero-box');
+							renderHero(hero, 'hero-box');
 						}
 						toggleInfo();
 					})
