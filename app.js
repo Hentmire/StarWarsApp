@@ -35,8 +35,8 @@ function seachHero(e) { //поиск по имени героя
 			document.querySelector('.hero-box').innerHTML = "<div><span class='error-message'>There is no hero with such name</span></div>";
 		} else {
 			let heroCount = data.count;
-	    let pageCount = Math.ceil(heroCount / 10);
-	    const heroInfo = getHeroInfo(data, 0);
+			let pageCount = Math.ceil(heroCount / 10);
+			const heroInfo = getHeroInfo(data, 0);
 	    for (let i = 0; i < heroInfo.param.length; i++) {
 	      let hero = createHeroes(heroInfo, i);
 	      renderHero(hero, 'hero-box');
@@ -52,7 +52,6 @@ function getHeroesRequest(url) { //make a request for Star Wars API
 	return fetch(url)
 		.then(response => response.json())
 }
-
 
 function getHeroInfo(data, i) { //Get hero's info and save in localStorage
 	const heroInfo = {
@@ -102,7 +101,6 @@ function toggleInfo() { //render hero info when click the hero-button
 	}
 }
 
-
 function addSlider(pageCount) { //pagination
   for (let i = 1; i <= pageCount; i++) {
     let pageNumber = document.createElement('a');
@@ -119,16 +117,17 @@ function addSlider(pageCount) { //pagination
 			if (localStorage.getItem(`${i}`)) { //check would this page have opened yet
 				let heroInfo = JSON.parse(localStorage.getItem(`${i}`));
 				document.querySelector('.hero-box').innerHTML = '';
-				for (let i = 0; i < 10; i++) {
+				for (let i = 0; i < heroInfo.param.length; i++) {
 					let hero = createHeroes(heroInfo, i);
 					renderHero(hero, 'hero-box');
 				}
+				toggleInfo();
 			} else {
 				getHeroesRequest(`https://swapi.co/api/people/?page=${i+1}`)
 					.then(data => {
 						document.querySelector('.hero-box').innerHTML = '';
 						const heroInfo = getHeroInfo(data, i);
-						for (let i = 0; i < 10; i++) {
+						for (let i = 0; i < heroInfo.param.length; i++) {
 							let hero = createHeroes(heroInfo, i);
 							renderHero(hero, 'hero-box');
 						}
